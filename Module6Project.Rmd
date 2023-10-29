@@ -7,24 +7,43 @@ bibliography: Module6Bibliography.bib
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+
 ```
 
 ## Introduction 
 Are the rates of wing-shape evolution different between the hind- and forewing? By how much? Are hind- and forewing shapes correlated? What inferences can one make based on shape correlations and flight control?
 
-According to the article @owens2020comparative based on comparative phylogenetics wing shape and size demonstrates independent hindwing and forewing evolution. It is important to address this evolutionary diversion because butterflies use their wings for flight, camouflage, mate recognition, warning, and mimicry. Thus, it is important to address that forewing shape and size are functionally and biomechanically contrained, whereas hindwings are more labile; possibly in response to disruptive selective pressure. 
+The goal of this project is to study wing-shape evolution across the lepidoptera, including hundreds of species from both the moths (a paraphyletic group) and butterflies. To do this, we’ll take a morphometric approach, characterizing the shape outline of fore- and hindwings from about 200 species of Lepidoptera.
 
-The general patterns and correlations among wing shape and size evolution are still poorly understood. Although there is some research conducted not enough to fully grasp the evolutionary trends and differences between hindwing and forwing. 
+According to the article @owens2020comparative based on comparative phylogenetics wing shape and size demonstrate independent hindwing and forewing evolution. It is important to address this evolutionary diversion because butterflies use their wings for flight, camouflage, mate recognition, warning, and mimicry. Thus, it is important to address that forewing shape and size are functionally and biomechanically constrained, whereas hindwings are more labile; possibly in response to disruptive selective pressure. 
+
+The general patterns and correlations among wing shape and size evolution are still poorly understood. Although there is some research conducted not enough to fully grasp the evolutionary trends and differences between hindwing and forwing evolution. 
 
 ## Methods 
+### Image acquisition
+Museums around the world have their holdings cataloged in databases, that researchers can search for records that have digital images. We were given a set of images for 20 species based on Prof. Kenaley's usage of the package, rgbif, in queering museum records with images (180/200). For the remainder of the images (20/200) Prof. Kenaley scoured the interweb for reputable sources of images. 
+
+### Digitization
+To outline the wings, we followed a generalized workflow in the image analysis program FIJI. 
+
+### Shape Analysis 
+Outline analysis involves breaking the shapes down into a mathematical description of the points that constitute the shapes. We used the EFA (elliptical fourier analysis) approach for fitting functions in which the shapes in a data set are described as a series of ellipses. However, once EFA is used to describe the shapes in a data set, there are many variables to consider including all the descriptors of all the ellipses that form the outlines. For this issue, we used the PCA (principal components analysis) in order to distill the set into a set of fewer variables that describe the important variance amount the original variables. 
+
+### Comparative analysis 
+In order to determine is hindwings and forewings vary in their evolutionary rates we evaluated the evolutionary rate of our PC scores. In order to answer the question of "do major groups of the Lepidoptera vary in their hind- and forewing evolvability?" we looked at the evolutionary rates of our PC scpres across our Lepidopteran tree. 
+
+### Evolutionary rates 
+In order to estimate the rates of morphological evolution over a phylogenetic tree we used the method "noncensored test," which uses the entire varian-cecovariance matrix, to calculate the likelihood of rates across the tree. 
+
+### Shape evolution correlation
+In order to tell whether hind- and forewing shape evolution is correlated we performed a phylogenetic independent contrasts (PIC) analysis.
 
 ## Results
 
 ## Discussion 
 
 ## Author Contributions 
-Julia Curry: Created .rmd outline. Wrote the introduction and cited a reference paper. Made .bib for bibliography. 
+Julia Curry: Created .rmd outline. Wrote the introduction and methods section, and cited a reference paper. Made .bib for bibliography. 
 
 ## References
 
