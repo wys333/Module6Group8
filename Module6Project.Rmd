@@ -1,0 +1,23 @@
+---
+title: "Module 6 Project"
+author: "Julia Curry, Yunshu Qiu, Nicole Wei "
+date: "2023-10-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction 
+
+## Methods 
+
+## Results
+
+## Discussion 
+
+## Author Contributions 
+
+## References
+
