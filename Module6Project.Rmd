@@ -224,7 +224,13 @@ summary(lm(hind~fore,PC1.pic))
 ```
 
 ## Discussion 
+According to the PCA plots, the evolutionary rates of forewings and hindwings vary because the PC1 values differ in both as well as PC2. 
+The four evolutionary rate values provide insights into how variation accumulates in the various principal components of both forewings and hindwings during the evolutionary process. Lower rates signify a slower rate of change or less accumulated variation over time, while higher rates denote a faster rate of change or a greater accumulation of variation over time within the specific principal components of the wings. @chotard2022evidence article characterized the mechanical properties of fresh wings and found that the tail vein was more fragile than the others, suggesting facilitated escape ability of butterflies attacked at this location. This may be an explanation for the difference in evolutionary rates of fore- and hindwing due to the functional differences. 
 
+
+The “evolvability” of the hind- and forewings vary significantly among major lineages of moths and butterflies as indicated by the different BM values of PC1 and PC2.
+
+According to the correlation graph, Hindwing and forewing shapes display a positively correlation. Moreover, with the p-value being 2.2e-16, it can be indicated that Hindwing and forewing shapes are significantly correlated. 
 
 
 
@@ -233,7 +239,7 @@ Julia Curry: Created .rmd outline. Wrote the introduction and methods section, a
 
 Yunshu Qiu: Implemented all the codes for analysis and generating graphs in the result section. Organized the appearances of the output html. 
 
-Nicole Wei: 
+Nicole Wei: Completion of the Discussion section and final polishing of the writing. 
 
 ## References
 
