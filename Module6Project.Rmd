@@ -14,7 +14,39 @@ library(ape)
 library(phytools)
 ```
 
-```{r, Shape Analysis, echo = FALSE}
+# Introduction 
+Are the rates of wing-shape evolution different between the hind- and forewing? By how much? Are hind- and forewing shapes correlated? What inferences can one make based on shape correlations and flight control?
+
+The goal of this project is to study wing-shape evolution across the lepidoptera, including hundreds of species from both the moths (a paraphyletic group) and butterflies. To do this, we’ll take a morphometric approach, characterizing the shape outline of fore- and hindwings from about 200 species of Lepidoptera.
+
+According to the article @owens2020comparative based on comparative phylogenetics wing shape and size demonstrate independent hindwing and forewing evolution. It is important to address this evolutionary diversion because butterflies use their wings for flight, camouflage, mate recognition, warning, and mimicry. Thus, it is important to address that forewing shape and size are functionally and biomechanically constrained, whereas hindwings are more labile; possibly in response to disruptive selective pressure. 
+
+The general patterns and correlations among wing shape and size evolution are still poorly understood. Although there is some research conducted not enough to fully grasp the evolutionary trends and differences between hindwing and forwing evolution. 
+
+# Methods 
+### Image acquisition
+Museums around the world have their holdings cataloged in databases, that researchers can search for records that have digital images. We were given a set of images for 20 species based on Prof. Kenaley's usage of the package, rgbif, in queering museum records with images (180/200). For the remainder of the images (20/200) Prof. Kenaley scoured the interweb for reputable sources of images. 
+
+### Digitization
+To outline the wings, we followed a generalized workflow in the image analysis program FIJI. 
+
+### Shape Analysis 
+Outline analysis involves breaking the shapes down into a mathematical description of the points that constitute the shapes. We used the EFA (elliptical fourier analysis) approach for fitting functions in which the shapes in a data set are described as a series of ellipses. However, once EFA is used to describe the shapes in a data set, there are many variables to consider including all the descriptors of all the ellipses that form the outlines. For this issue, we used the PCA (principal components analysis) in order to distill the set into a set of fewer variables that describe the important variance amount the original variables. 
+
+### Comparative analysis 
+In order to determine is hindwings and forewings vary in their evolutionary rates we evaluated the evolutionary rate of our PC scores. In order to answer the question of "do major groups of the Lepidoptera vary in their hind- and forewing evolvability?" we looked at the evolutionary rates of our PC scpres across our Lepidopteran tree. 
+
+### Evolutionary rates 
+In order to estimate the rates of morphological evolution over a phylogenetic tree we used the method "noncensored test," which uses the entire varian-cecovariance matrix, to calculate the likelihood of rates across the tree. 
+
+### Shape evolution correlation
+In order to tell whether hind- and forewing shape evolution is correlated we performed a phylogenetic independent contrasts (PIC) analysis.
+
+# Results
+
+### PCA plots
+
+```{r, Shape Analysis, include = FALSE}
 f <- list.files("class_out_data_f23",full.names=T)
 
 #make a large df with vroom
@@ -64,7 +96,9 @@ hindwing.pca <- hindwings %>%
   fgProcrustes() %>% 
   efourier(norm=FALSE) %>% 
   PCA()
+```
 
+```{r, PCA plots, echo = FALSE}
 #Visualizing PCA for forewing
 forewing.pca %>% 
   plot_PCA(title = "forewings")
@@ -74,7 +108,9 @@ hindwing.pca %>%
   plot_PCA(title = "hindwings")
 ```
 
-```{r, Comparative Analysis, echo = FALSE}
+For the principle components (PC) of forewings, the PC1 and PC2 values are 55% and 18% respectively. Similarly for hindwings, the PC1 and PC2 values are 49.7% and 30.6% respectively.
+
+```{r, Comparative Analysis, include = FALSE}
 lep.tree <- ape::read.tree("lep_tree2.tre")
 
 lep.tree <- ladderize(lep.tree)
@@ -92,7 +128,7 @@ forewing.pca2 <-  tibble(xy.file=basename(rownames(forewing.pca$x)),PC1=forewing
   left_join(out.data)
 ```
 
-```{r, Evolutionary Rate, echo = FALSE}
+```{r, Evolutionary Rate, include = FALSE}
 keep <- intersect(unique(out.data$species),lep.tree$tip.label)
 lep.tree2 <- keep.tip(lep.tree,keep)
 
@@ -153,7 +189,16 @@ forePC2.BM<-brownie.lite(lep.tree2,fore.pc2*10)
 hindPC2.BM<-brownie.lite(lep.tree2,hind.pc2*10)
 ```
 
-```{r, Shape evolution correlation, echo = FALSE}
+### Evolutionary rates
+
+```{r, rates estimates}
+forePC1.BM$sig2.single
+forePC2.BM$sig2.single
+hindPC1.BM$sig2.single
+hindPC2.BM$sig2.single
+```
+
+```{r, Shape evolution correlation, include = FALSE}
 hindPC1.pic <- pic(hind.pc1,phy = lep.tree2)
 forePC1.pic <- pic(fore.pc1,phy = lep.tree2)
 
@@ -161,45 +206,34 @@ PC1.pic <- tibble(
   hind=hindPC1.pic,
   fore=forePC1.pic
 )
+```
 
+### Shape Evolution Correlation
+
+```{r, plot, echo = FALSE, message = FALSE}
 PC1.pic %>% 
   ggplot(aes(x=fore,y=hind))+geom_point()+geom_smooth(method="lm")
 ```
 
-## Introduction 
-Are the rates of wing-shape evolution different between the hind- and forewing? By how much? Are hind- and forewing shapes correlated? What inferences can one make based on shape correlations and flight control?
+The graph displays a correlation with a p-value of 2.2e-16 displayed below in the statistic section.
 
-The goal of this project is to study wing-shape evolution across the lepidoptera, including hundreds of species from both the moths (a paraphyletic group) and butterflies. To do this, we’ll take a morphometric approach, characterizing the shape outline of fore- and hindwings from about 200 species of Lepidoptera.
+### Statistics of the shape evolution correlation
 
-According to the article @owens2020comparative based on comparative phylogenetics wing shape and size demonstrate independent hindwing and forewing evolution. It is important to address this evolutionary diversion because butterflies use their wings for flight, camouflage, mate recognition, warning, and mimicry. Thus, it is important to address that forewing shape and size are functionally and biomechanically constrained, whereas hindwings are more labile; possibly in response to disruptive selective pressure. 
-
-The general patterns and correlations among wing shape and size evolution are still poorly understood. Although there is some research conducted not enough to fully grasp the evolutionary trends and differences between hindwing and forwing evolution. 
-
-## Methods 
-### Image acquisition
-Museums around the world have their holdings cataloged in databases, that researchers can search for records that have digital images. We were given a set of images for 20 species based on Prof. Kenaley's usage of the package, rgbif, in queering museum records with images (180/200). For the remainder of the images (20/200) Prof. Kenaley scoured the interweb for reputable sources of images. 
-
-### Digitization
-To outline the wings, we followed a generalized workflow in the image analysis program FIJI. 
-
-### Shape Analysis 
-Outline analysis involves breaking the shapes down into a mathematical description of the points that constitute the shapes. We used the EFA (elliptical fourier analysis) approach for fitting functions in which the shapes in a data set are described as a series of ellipses. However, once EFA is used to describe the shapes in a data set, there are many variables to consider including all the descriptors of all the ellipses that form the outlines. For this issue, we used the PCA (principal components analysis) in order to distill the set into a set of fewer variables that describe the important variance amount the original variables. 
-
-### Comparative analysis 
-In order to determine is hindwings and forewings vary in their evolutionary rates we evaluated the evolutionary rate of our PC scores. In order to answer the question of "do major groups of the Lepidoptera vary in their hind- and forewing evolvability?" we looked at the evolutionary rates of our PC scpres across our Lepidopteran tree. 
-
-### Evolutionary rates 
-In order to estimate the rates of morphological evolution over a phylogenetic tree we used the method "noncensored test," which uses the entire varian-cecovariance matrix, to calculate the likelihood of rates across the tree. 
-
-### Shape evolution correlation
-In order to tell whether hind- and forewing shape evolution is correlated we performed a phylogenetic independent contrasts (PIC) analysis.
-
-## Results
+```{r, stat, echo = FALSE}
+summary(lm(hind~fore,PC1.pic))
+```
 
 ## Discussion 
 
+
+
+
 ## Author Contributions 
 Julia Curry: Created .rmd outline. Wrote the introduction and methods section, and cited a reference paper. Made .bib for bibliography. 
+
+Yunshu Qiu: Implemented all the codes for analysis and generating graphs in the result section. Organized the appearances of the output html. 
+
+Nicole Wei: 
 
 ## References
 
